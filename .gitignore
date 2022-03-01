@@ -1,12 +1,7 @@
-*
-!*/
-
-!.gitignore
-!README.md
-
+.vscode
 !.vscode/cmake-kits.json
 !.vscode/extensions.json
 !.vscode/launch.json
 !.vscode/settings.json
-!gcc-arm-none-eabi.cmake
-!CMakeLists.txt
+
+build

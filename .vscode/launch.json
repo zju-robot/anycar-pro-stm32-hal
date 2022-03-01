@@ -13,10 +13,10 @@
             "servertype": "openocd",
             "configFiles": [
                 "interface/stlink.cfg",
-                // "board/st_nucleo_f3.cfg" // 在"OpenOCD根目录/share/openocd/scripts"下寻找适用于当前芯片的配置文件
+                "board/st_nucleo_f3.cfg" // 在"OpenOCD根目录/share/openocd/scripts"下寻找适用于当前芯片的配置文件
             ],
             "gdbPath": "arm-none-eabi-gdb",
-            // "svdFile": "STM32F303.svd" // 在ST官网下载芯片的svd文件放入工作空间根目录
+            "svdFile": "STM32F303.svd" // 在ST官网下载芯片的svd文件放入工作空间根目录
         }
     ]
 }
