@@ -5,3 +5,6 @@
 !.vscode/settings.json
 
 build
+
+Makefile
+.mxproject
