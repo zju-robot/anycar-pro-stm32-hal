@@ -11,7 +11,12 @@ enable_language(C ASM)
 set(STARTUP_SRC startup_stm32f303x8.s)
 aux_source_directory(Core/Src CORE_SRCS)
 aux_source_directory(Drivers/STM32F3xx_HAL_Driver/Src HAL_DRIVERS_SRCS)
-set(SOURCES ${STARTUP_SRC} ${CORE_SRCS} ${HAL_DRIVERS_SRCS})
+aux_source_directory(Middlewares/Third_Party/FreeRTOS/Source FREERTOS_SOURCE_SRCS)
+aux_source_directory(Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 CMSIS_RTOS_SRCS)
+aux_source_directory(Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang FREERTOS_MEMMANG_SRCS)
+aux_source_directory(Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F FREERTOS_GCC_SRCS)
+set(FREERTOS_SRCS ${FREERTOS_SOURCE_SRCS} ${CMSIS_RTOS_SRCS} ${FREERTOS_MEMMANG_SRCS} ${FREERTOS_GCC_SRCS})
+set(SOURCES ${STARTUP_SRC} ${CORE_SRCS} ${HAL_DRIVERS_SRCS} ${FREERTOS_SRCS})
 
 # 头文件搜索目录
 set(INCLUDE_DIRECTORIES
@@ -19,7 +24,10 @@ set(INCLUDE_DIRECTORIES
     Drivers/STM32F3xx_HAL_Driver/Inc
     Drivers/STM32F3xx_HAL_Driver/Inc/Legacy
     Drivers/CMSIS/Device/ST/STM32F3xx/Include
-    Drivers/CMSIS/Include)
+    Drivers/CMSIS/Include
+    Middlewares/Third_Party/FreeRTOS/Source/include
+    Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
+    Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F)
 
 # 链接文件
  set(LD_SCRIPT ../STM32F303K8Tx_FLASH.ld)
