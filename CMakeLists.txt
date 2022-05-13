@@ -27,7 +27,8 @@ set(INCLUDE_DIRECTORIES
     Drivers/CMSIS/Include
     Middlewares/Third_Party/FreeRTOS/Source/include
     Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
-    Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F)
+    Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
+    Vendor/Mavlink)
 
 # 链接文件
  set(LD_SCRIPT ../STM32F303K8Tx_FLASH.ld)
