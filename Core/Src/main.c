@@ -48,14 +48,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+extern TIM_HandleTypeDef htim7;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
-
+void HAL_SysTimerCallback(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -100,6 +100,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   AnycarPro_CallbacksStart();
+  htim7.PeriodElapsedCallback = HAL_SysTimerCallback;
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -168,7 +169,11 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_SysTimerCallback(TIM_HandleTypeDef *htim)
+{
+  UNUSED(htim);
+  HAL_IncTick();
+}
 /* USER CODE END 4 */
 
 /**
