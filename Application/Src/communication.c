@@ -1,29 +1,24 @@
-#define TX_BUF_SIZE 80
-
-#include "tasks.h"
-
-#include "stm32f3xx_hal.h"
-
-#include "common/mavlink.h"
-#include "mavlink_helpers.h"
+#include "communication.h"
 
 #include "anycar_pro.h"
+#include "tasks.h"
 
-/**
- * @brief 默认任务, 用于启动和调试
- *
- * @param argument FreeRTOS默认参数. 可无视
- */
-void StartDefaultTask(void *argument)
+static uint8_t receivedByte;
+
+void USBUart_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  UNUSED(argument);
+  UNUSED(huart);
 
-  osTimerStart(sendHeartbeatsTimerHandle, 1000);
+  HAL_UART_Receive_IT(&USB_HUART, &receivedByte, 1); //开启下一次接收
+  osMessageQueuePut(receivedBytesQueueHandle, &receivedByte, 0,
+                    0); //压入本次收到的字节
+}
 
-  for (;;)
-  {
-    osDelay(1);
-  }
+void USBUart_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  UNUSED(huart);
+
+  osSemaphoreRelease(usbOccupationBinarySemHandle); //解除对信号量的占用
 }
 
 /**
@@ -118,13 +113,22 @@ void StartTransmitMessagesTask(void *argument)
   }
 }
 
-/**
- * @brief 定时循环发送心跳包的回调
- *
- * @param argument FreeRTOS默认参数. 可无视
- */
-void SendHeartbeatsCallback(void *argument)
+void StartCommunication()
 {
-  static GenericMsg genericMsg = {.msgid = MAVLINK_MSG_ID_HEARTBEAT};
-  osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
+  // USB串口初始化
+  USB_HUART.RxCpltCallback = USBUart_RxCpltCallback;
+  USB_HUART.TxCpltCallback = USBUart_TxCpltCallback;
+  HAL_UART_Receive_IT(&USB_HUART, &receivedByte, 1);
+
+  osMessageQueueReset(receivedBytesQueueHandle);
+  osThreadResume(parseMessagesTaskHandle);
+  osThreadResume(transmitMessagesTaskHandle);
+}
+
+void StopCommunication()
+{
+  osThreadSuspend(parseMessagesTaskHandle);
+  osThreadSuspend(transmitMessagesTaskHandle);
+  USB_HUART.RxCpltCallback = NULL;
+  USB_HUART.TxCpltCallback = NULL;
 }

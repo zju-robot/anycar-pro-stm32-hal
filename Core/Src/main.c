@@ -27,8 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "callbacks.h"
-#include "tasks.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,7 +98,6 @@ int main(void)
   MX_DMA_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  AnycarPro_CallbacksStart();
   htim7.PeriodElapsedCallback = HAL_SysTimerCallback;
   /* USER CODE END 2 */
 
