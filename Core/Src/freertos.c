@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "common/mavlink.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,12 +47,51 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-/* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+/* Definitions for debugTask */
+osThreadId_t debugTaskHandle;
+const osThreadAttr_t debugTask_attributes = {
+  .name = "debugTask",
+  .stack_size = 64 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for transmitMessagesTask */
+osThreadId_t transmitMessagesTaskHandle;
+const osThreadAttr_t transmitMessagesTask_attributes = {
+  .name = "transmitMessagesTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for parseMessagesTask */
+osThreadId_t parseMessagesTaskHandle;
+const osThreadAttr_t parseMessagesTask_attributes = {
+  .name = "parseMessagesTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for receivedBytesQueue */
+osMessageQueueId_t receivedBytesQueueHandle;
+const osMessageQueueAttr_t receivedBytesQueue_attributes = {
+  .name = "receivedBytesQueue"
+};
+/* Definitions for transmitMessagesQueue */
+osMessageQueueId_t transmitMessagesQueueHandle;
+const osMessageQueueAttr_t transmitMessagesQueue_attributes = {
+  .name = "transmitMessagesQueue"
+};
+/* Definitions for heartbeatsQueue */
+osMessageQueueId_t heartbeatsQueueHandle;
+const osMessageQueueAttr_t heartbeatsQueue_attributes = {
+  .name = "heartbeatsQueue"
+};
+/* Definitions for commandsQueue */
+osMessageQueueId_t commandsQueueHandle;
+const osMessageQueueAttr_t commandsQueue_attributes = {
+  .name = "commandsQueue"
+};
+/* Definitions for usbOccupationBinarySem */
+osSemaphoreId_t usbOccupationBinarySemHandle;
+const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
+  .name = "usbOccupationBinarySem"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,7 +99,9 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void *argument);
+void StartDebugTask(void *argument);
+void StartTransmitMessagesTask(void *argument);
+void StartParseMessagesTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -78,6 +119,10 @@ void MX_FREERTOS_Init(void) {
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
+  /* Create the semaphores(s) */
+  /* creation of usbOccupationBinarySem */
+  usbOccupationBinarySemHandle = osSemaphoreNew(1, 1, &usbOccupationBinarySem_attributes);
+
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
@@ -86,13 +131,32 @@ void MX_FREERTOS_Init(void) {
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of receivedBytesQueue */
+  receivedBytesQueueHandle = osMessageQueueNew (32, 1, &receivedBytesQueue_attributes);
+
+  /* creation of transmitMessagesQueue */
+  transmitMessagesQueueHandle = osMessageQueueNew (4, 60, &transmitMessagesQueue_attributes);
+
+  /* creation of heartbeatsQueue */
+  heartbeatsQueueHandle = osMessageQueueNew (4, 12, &heartbeatsQueue_attributes);
+
+  /* creation of commandsQueue */
+  commandsQueueHandle = osMessageQueueNew (4, 56, &commandsQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  /* creation of debugTask */
+  debugTaskHandle = osThreadNew(StartDebugTask, NULL, &debugTask_attributes);
+
+  /* creation of transmitMessagesTask */
+  transmitMessagesTaskHandle = osThreadNew(StartTransmitMessagesTask, NULL, &transmitMessagesTask_attributes);
+
+  /* creation of parseMessagesTask */
+  parseMessagesTaskHandle = osThreadNew(StartParseMessagesTask, NULL, &parseMessagesTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -104,22 +168,58 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_StartDebugTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
+  * @brief  Function implementing the debugTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+/* USER CODE END Header_StartDebugTask */
+__weak void StartDebugTask(void *argument)
 {
-  /* USER CODE BEGIN StartDefaultTask */
+  /* USER CODE BEGIN StartDebugTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartDefaultTask */
+  /* USER CODE END StartDebugTask */
+}
+
+/* USER CODE BEGIN Header_StartTransmitMessagesTask */
+/**
+* @brief Function implementing the transmitMessagesTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTransmitMessagesTask */
+__weak void StartTransmitMessagesTask(void *argument)
+{
+  /* USER CODE BEGIN StartTransmitMessagesTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartTransmitMessagesTask */
+}
+
+/* USER CODE BEGIN Header_StartParseMessagesTask */
+/**
+* @brief Function implementing the parseMessagesTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartParseMessagesTask */
+__weak void StartParseMessagesTask(void *argument)
+{
+  /* USER CODE BEGIN StartParseMessagesTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartParseMessagesTask */
 }
 
 /* Private application code --------------------------------------------------*/

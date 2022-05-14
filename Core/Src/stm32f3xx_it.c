@@ -55,8 +55,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim17;
+extern DMA_HandleTypeDef hdma_usart2_tx;
+extern UART_HandleTypeDef huart2;
+extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN EV */
 
@@ -161,18 +162,45 @@ void DebugMon_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM1 trigger and commutation and TIM17 interrupts.
+  * @brief This function handles DMA1 channel7 global interrupt.
   */
-void TIM1_TRG_COM_TIM17_IRQHandler(void)
+void DMA1_Channel7_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM17_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Channel7_IRQn 0 */
 
-  /* USER CODE END TIM1_TRG_COM_TIM17_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim1);
-  HAL_TIM_IRQHandler(&htim17);
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM17_IRQn 1 */
+  /* USER CODE END DMA1_Channel7_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart2_tx);
+  /* USER CODE BEGIN DMA1_Channel7_IRQn 1 */
 
-  /* USER CODE END TIM1_TRG_COM_TIM17_IRQn 1 */
+  /* USER CODE END DMA1_Channel7_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXT line 26.
+  */
+void USART2_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART2_IRQn 0 */
+
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
+
+  /* USER CODE END USART2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global and DAC2 underrun error interrupts.
+  */
+void TIM7_DAC2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_DAC2_IRQn 0 */
+
+  /* USER CODE END TIM7_DAC2_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_DAC2_IRQn 1 */
+
+  /* USER CODE END TIM7_DAC2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
