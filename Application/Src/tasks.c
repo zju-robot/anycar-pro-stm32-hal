@@ -10,22 +10,19 @@
 #include "anycar_pro.h"
 
 /**
- * @brief 调试用任务
+ * @brief 默认任务, 用于启动和调试
  *
  * @param argument FreeRTOS默认参数. 可无视
  */
-void StartDebugTask(void *argument)
+void StartDefaultTask(void *argument)
 {
   UNUSED(argument);
 
-  generic_message_t genericMsg;
+  osTimerStart(sendHeartbeatsTimerHandle, 1000);
 
   for (;;)
   {
-    osMessageQueueGet(commandsQueueHandle, &genericMsg.command, 0,
-                      osWaitForever);
-    genericMsg.msgid = MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED;
-    osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
+    osDelay(1);
   }
 }
 
@@ -119,4 +116,15 @@ void StartTransmitMessagesTask(void *argument)
     uint16_t length = mavlink_msg_to_send_buffer(buffer, &mavMsg);
     HAL_UART_Transmit_DMA(&USB_HUART, buffer, length);
   }
+}
+
+/**
+ * @brief 定时循环发送心跳包的回调
+ *
+ * @param argument FreeRTOS默认参数. 可无视
+ */
+void SendHeartbeatsCallback(void *argument)
+{
+  static generic_message_t genericMsg = {.msgid = MAVLINK_MSG_ID_HEARTBEAT};
+  osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
 }

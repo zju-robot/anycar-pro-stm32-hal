@@ -47,10 +47,10 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-/* Definitions for debugTask */
-osThreadId_t debugTaskHandle;
-const osThreadAttr_t debugTask_attributes = {
-  .name = "debugTask",
+/* Definitions for defaultTask */
+osThreadId_t defaultTaskHandle;
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
   .stack_size = 64 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
@@ -88,6 +88,11 @@ osMessageQueueId_t commandsQueueHandle;
 const osMessageQueueAttr_t commandsQueue_attributes = {
   .name = "commandsQueue"
 };
+/* Definitions for sendHeartbeatsTimer */
+osTimerId_t sendHeartbeatsTimerHandle;
+const osTimerAttr_t sendHeartbeatsTimer_attributes = {
+  .name = "sendHeartbeatsTimer"
+};
 /* Definitions for usbOccupationBinarySem */
 osSemaphoreId_t usbOccupationBinarySemHandle;
 const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
@@ -99,9 +104,10 @@ const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDebugTask(void *argument);
+void StartDefaultTask(void *argument);
 void StartTransmitMessagesTask(void *argument);
 void StartParseMessagesTask(void *argument);
+void SendHeartbeatsCallback(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -127,6 +133,10 @@ void MX_FREERTOS_Init(void) {
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
 
+  /* Create the timer(s) */
+  /* creation of sendHeartbeatsTimer */
+  sendHeartbeatsTimerHandle = osTimerNew(SendHeartbeatsCallback, osTimerPeriodic, NULL, &sendHeartbeatsTimer_attributes);
+
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
@@ -149,8 +159,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of debugTask */
-  debugTaskHandle = osThreadNew(StartDebugTask, NULL, &debugTask_attributes);
+  /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of transmitMessagesTask */
   transmitMessagesTaskHandle = osThreadNew(StartTransmitMessagesTask, NULL, &transmitMessagesTask_attributes);
@@ -168,22 +178,22 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartDebugTask */
+/* USER CODE BEGIN Header_StartDefaultTask */
 /**
-  * @brief  Function implementing the debugTask thread.
+  * @brief  Function implementing the defaultTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDebugTask */
-__weak void StartDebugTask(void *argument)
+/* USER CODE END Header_StartDefaultTask */
+__weak void StartDefaultTask(void *argument)
 {
-  /* USER CODE BEGIN StartDebugTask */
+  /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartDebugTask */
+  /* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Header_StartTransmitMessagesTask */
@@ -220,6 +230,14 @@ __weak void StartParseMessagesTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartParseMessagesTask */
+}
+
+/* SendHeartbeatsCallback function */
+__weak void SendHeartbeatsCallback(void *argument)
+{
+  /* USER CODE BEGIN SendHeartbeatsCallback */
+
+  /* USER CODE END SendHeartbeatsCallback */
 }
 
 /* Private application code --------------------------------------------------*/

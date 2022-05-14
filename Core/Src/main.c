@@ -28,6 +28,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "callbacks.h"
+#include "tasks.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
