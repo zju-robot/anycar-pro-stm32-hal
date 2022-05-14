@@ -8,7 +8,7 @@
  * @brief 通用消息类型, 同时存储心跳包和命令两种消息, 用于统一队列数据类型
  *
  */
-typedef struct __generic_message_t
+typedef struct __GenericMsg
 {
   uint32_t msgid; //消息类型ID, 与MavLink的消息类型ID相同
 
@@ -17,7 +17,7 @@ typedef struct __generic_message_t
     mavlink_heartbeat_t heartbeat;                   //心跳包
     mavlink_set_position_target_local_ned_t command; //控制命令
   };
-} generic_message_t;
+} GenericMsg;
 
 extern osThreadId_t debugTaskHandle;
 extern osThreadId_t transmitMessagesTaskHandle;

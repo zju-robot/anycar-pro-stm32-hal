@@ -38,7 +38,7 @@ void StartParseMessagesTask(void *argument)
   uint8_t byte;
   mavlink_message_t mavMsg;
   mavlink_status_t mavStatus;
-  generic_message_t genericMsg;
+  GenericMsg genericMsg;
 
   for (;;)
   {
@@ -84,7 +84,7 @@ void StartTransmitMessagesTask(void *argument)
 
   uint8_t buffer[TX_BUF_SIZE];
   mavlink_message_t mavMsg;
-  generic_message_t genericMsg;
+  GenericMsg genericMsg;
 
   for (;;)
   {
@@ -125,6 +125,6 @@ void StartTransmitMessagesTask(void *argument)
  */
 void SendHeartbeatsCallback(void *argument)
 {
-  static generic_message_t genericMsg = {.msgid = MAVLINK_MSG_ID_HEARTBEAT};
+  static GenericMsg genericMsg = {.msgid = MAVLINK_MSG_ID_HEARTBEAT};
   osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
 }
