@@ -30,10 +30,10 @@ void StartParseMessagesTask(void *argument)
 {
   UNUSED(argument);
 
-  uint8_t byte;
-  mavlink_message_t mavMsg;
-  mavlink_status_t mavStatus;
-  GenericMsg genericMsg;
+  static uint8_t byte;
+  static mavlink_message_t mavMsg;
+  static mavlink_status_t mavStatus;
+  static GenericMsg genericMsg;
 
   for (;;)
   {
@@ -77,9 +77,9 @@ void StartTransmitMessagesTask(void *argument)
 {
   UNUSED(argument);
 
-  uint8_t buffer[TX_BUF_SIZE];
-  mavlink_message_t mavMsg;
-  GenericMsg genericMsg;
+  static uint8_t buffer[TX_BUF_SIZE];
+  static mavlink_message_t mavMsg;
+  static GenericMsg genericMsg;
 
   for (;;)
   {

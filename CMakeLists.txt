@@ -40,6 +40,9 @@ set(INCLUDE_DIRECTORIES
 # 编译、链接选项
 # # # # # # # # # #
 
+# FreeRTOS相关选项
+add_compile_definitions(configAPPLICATION_ALLOCATED_HEAP=1)
+
 # MCU相关选项
 add_compile_options(-mcpu=cortex-m4 -mthumb)
 add_link_options(-mcpu=cortex-m4 -mthumb)

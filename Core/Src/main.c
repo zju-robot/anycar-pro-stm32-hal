@@ -48,6 +48,7 @@
 
 /* USER CODE BEGIN PV */
 extern TIM_HandleTypeDef htim7;
+__attribute__((section(".ccmram"))) uint8_t ucHeap[configTOTAL_HEAP_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
