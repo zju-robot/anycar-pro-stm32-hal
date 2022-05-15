@@ -68,6 +68,13 @@ const osThreadAttr_t parseMessagesTask_attributes = {
   .stack_size = 96 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for executeCommandsTask */
+osThreadId_t executeCommandsTaskHandle;
+const osThreadAttr_t executeCommandsTask_attributes = {
+  .name = "executeCommandsTask",
+  .stack_size = 96 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for receivedBytesQueue */
 osMessageQueueId_t receivedBytesQueueHandle;
 const osMessageQueueAttr_t receivedBytesQueue_attributes = {
@@ -107,6 +114,7 @@ const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
 void StartDefaultTask(void *argument);
 void StartTransmitMessagesTask(void *argument);
 void StartParseMessagesTask(void *argument);
+void StartExecuteCommandsTask(void *argument);
 void SendHeartbeatsCallback(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -167,6 +175,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of parseMessagesTask */
   parseMessagesTaskHandle = osThreadNew(StartParseMessagesTask, NULL, &parseMessagesTask_attributes);
+
+  /* creation of executeCommandsTask */
+  executeCommandsTaskHandle = osThreadNew(StartExecuteCommandsTask, NULL, &executeCommandsTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -230,6 +241,24 @@ __weak void StartParseMessagesTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartParseMessagesTask */
+}
+
+/* USER CODE BEGIN Header_StartExecuteCommandsTask */
+/**
+* @brief Function implementing the executeCommandsTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartExecuteCommandsTask */
+__weak void StartExecuteCommandsTask(void *argument)
+{
+  /* USER CODE BEGIN StartExecuteCommandsTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartExecuteCommandsTask */
 }
 
 /* SendHeartbeatsCallback function */
