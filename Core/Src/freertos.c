@@ -51,21 +51,21 @@
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 64 * 4,
+  .stack_size = 96 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for transmitMessagesTask */
 osThreadId_t transmitMessagesTaskHandle;
 const osThreadAttr_t transmitMessagesTask_attributes = {
   .name = "transmitMessagesTask",
-  .stack_size = 128 * 4,
+  .stack_size = 96 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for parseMessagesTask */
 osThreadId_t parseMessagesTaskHandle;
 const osThreadAttr_t parseMessagesTask_attributes = {
   .name = "parseMessagesTask",
-  .stack_size = 128 * 4,
+  .stack_size = 96 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for receivedBytesQueue */
