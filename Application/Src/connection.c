@@ -27,8 +27,8 @@ void StartCheckConnectionTask(void *argument)
 
   for (;;)
   {
-    osStatus_t status =
-        osMessageQueueGet(heartbeatsQueueHandle, &heartbeatMsg, 0, 700);
+    osStatus_t status = osMessageQueueGet(heartbeatsQueueHandle, &heartbeatMsg,
+                                          0, HEARTBEAT_TIMEOUT);
 
     if (status == osOK && !connected)
       StartMotionControl(), connected = 1;
@@ -39,6 +39,12 @@ void StartCheckConnectionTask(void *argument)
 
 void StartConnection()
 {
-  osTimerStart(sendHeartbeatsTimerHandle, 200);
+  osTimerStart(sendHeartbeatsTimerHandle, HEARTBEAT_PERIOD);
   osThreadResume(checkConnectionTaskHandle);
+}
+
+void StopConnection()
+{
+  osThreadSuspend(checkConnectionTaskHandle);
+  osTimerStop(sendHeartbeatsTimerHandle);
 }

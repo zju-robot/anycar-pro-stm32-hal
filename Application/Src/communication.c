@@ -43,17 +43,13 @@ void StartParseMessagesTask(void *argument)
       {
       case MAVLINK_MSG_ID_HEARTBEAT:
         mavlink_msg_heartbeat_decode(&mavMsg, &genericMsg.heartbeat);
-        genericMsg.msgid = MAVLINK_MSG_ID_HEARTBEAT;
         osMessageQueuePut(heartbeatsQueueHandle, &genericMsg.heartbeat, 0, 0);
-        // osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
         break;
 
       case MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED:
         mavlink_msg_set_position_target_local_ned_decode(&mavMsg,
                                                          &genericMsg.command);
-        genericMsg.msgid = MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED;
         osMessageQueuePut(commandsQueueHandle, &genericMsg.command, 0, 0);
-        // osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
         break;
 
       default:

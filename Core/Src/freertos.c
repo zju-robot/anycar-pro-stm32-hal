@@ -120,8 +120,8 @@ const osTimerAttr_t reportStatusTimer_attributes = {
 
 void StartDefaultTask(void *argument);
 extern void StartTransmitMessagesTask(void *argument);
-void StartParseMessagesTask(void *argument);
-void StartExecuteCommandsTask(void *argument);
+extern void StartParseMessagesTask(void *argument);
+extern void StartExecuteCommandsTask(void *argument);
 extern void StartCheckConnectionTask(void *argument);
 extern void SendHeartbeatsCallback(void *argument);
 extern void ReportStatusCallback(void *argument);
@@ -216,42 +216,6 @@ __weak void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
-}
-
-/* USER CODE BEGIN Header_StartParseMessagesTask */
-/**
-* @brief Function implementing the parseMessagesTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartParseMessagesTask */
-__weak void StartParseMessagesTask(void *argument)
-{
-  /* USER CODE BEGIN StartParseMessagesTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartParseMessagesTask */
-}
-
-/* USER CODE BEGIN Header_StartExecuteCommandsTask */
-/**
-* @brief Function implementing the executeCommandsTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartExecuteCommandsTask */
-__weak void StartExecuteCommandsTask(void *argument)
-{
-  /* USER CODE BEGIN StartExecuteCommandsTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartExecuteCommandsTask */
 }
 
 /* Private application code --------------------------------------------------*/

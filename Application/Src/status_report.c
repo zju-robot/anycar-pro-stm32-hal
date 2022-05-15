@@ -32,6 +32,9 @@ void ReportStatusCallback(void *argument)
   osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
 }
 
-void StartStatusReport() { osTimerStart(reportStatusTimerHandle, 100); }
+void StartStatusReport()
+{
+  osTimerStart(reportStatusTimerHandle, REPORT_PERIOD);
+}
 
 void StopStatusReport() { osTimerStop(reportStatusTimerHandle); }
