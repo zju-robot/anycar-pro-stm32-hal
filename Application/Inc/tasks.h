@@ -2,7 +2,7 @@
 
 #include "cmsis_os.h"
 
-extern osThreadId_t debugTaskHandle;
+extern osThreadId_t defaultTaskHandle;
 extern osThreadId_t transmitMessagesTaskHandle;
 extern osThreadId_t parseMessagesTaskHandle;
 extern osThreadId_t executeCommandsTaskHandle;

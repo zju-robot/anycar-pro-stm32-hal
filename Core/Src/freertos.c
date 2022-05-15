@@ -51,14 +51,14 @@
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 96 * 4,
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for transmitMessagesTask */
 osThreadId_t transmitMessagesTaskHandle;
 const osThreadAttr_t transmitMessagesTask_attributes = {
   .name = "transmitMessagesTask",
-  .stack_size = 256 * 4,
+  .stack_size = 160 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for parseMessagesTask */
@@ -105,11 +105,6 @@ osTimerId_t reportStatusTimerHandle;
 const osTimerAttr_t reportStatusTimer_attributes = {
   .name = "reportStatusTimer"
 };
-/* Definitions for usbOccupationBinarySem */
-osSemaphoreId_t usbOccupationBinarySemHandle;
-const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
-  .name = "usbOccupationBinarySem"
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -117,11 +112,11 @@ const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
-void StartTransmitMessagesTask(void *argument);
+extern void StartTransmitMessagesTask(void *argument);
 void StartParseMessagesTask(void *argument);
 void StartExecuteCommandsTask(void *argument);
-void SendHeartbeatsCallback(void *argument);
-void ReportStatusCallback(void *argument);
+extern void SendHeartbeatsCallback(void *argument);
+extern void ReportStatusCallback(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -138,10 +133,6 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
-
-  /* Create the semaphores(s) */
-  /* creation of usbOccupationBinarySem */
-  usbOccupationBinarySemHandle = osSemaphoreNew(1, 1, &usbOccupationBinarySem_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -166,10 +157,10 @@ void MX_FREERTOS_Init(void) {
   transmitMessagesQueueHandle = osMessageQueueNew (4, 112, &transmitMessagesQueue_attributes);
 
   /* creation of heartbeatsQueue */
-  heartbeatsQueueHandle = osMessageQueueNew (4, 12, &heartbeatsQueue_attributes);
+  heartbeatsQueueHandle = osMessageQueueNew (2, 12, &heartbeatsQueue_attributes);
 
   /* creation of commandsQueue */
-  commandsQueueHandle = osMessageQueueNew (4, 56, &commandsQueue_attributes);
+  commandsQueueHandle = osMessageQueueNew (2, 56, &commandsQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -216,24 +207,6 @@ __weak void StartDefaultTask(void *argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_StartTransmitMessagesTask */
-/**
-* @brief Function implementing the transmitMessagesTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTransmitMessagesTask */
-__weak void StartTransmitMessagesTask(void *argument)
-{
-  /* USER CODE BEGIN StartTransmitMessagesTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTransmitMessagesTask */
-}
-
 /* USER CODE BEGIN Header_StartParseMessagesTask */
 /**
 * @brief Function implementing the parseMessagesTask thread.
@@ -268,22 +241,6 @@ __weak void StartExecuteCommandsTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartExecuteCommandsTask */
-}
-
-/* SendHeartbeatsCallback function */
-__weak void SendHeartbeatsCallback(void *argument)
-{
-  /* USER CODE BEGIN SendHeartbeatsCallback */
-
-  /* USER CODE END SendHeartbeatsCallback */
-}
-
-/* ReportStatusCallback function */
-__weak void ReportStatusCallback(void *argument)
-{
-  /* USER CODE BEGIN ReportStatusCallback */
-
-  /* USER CODE END ReportStatusCallback */
 }
 
 /* Private application code --------------------------------------------------*/
