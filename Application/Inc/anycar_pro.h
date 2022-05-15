@@ -8,7 +8,8 @@
 
 // 机械尺寸相关宏定义
 #define WHEEL_DIAMETER (0.1f)
-#define WHEEL_TREAD (0.2f)
+#define WHEEL_RADIUS (WHEEL_DIAMETER / 2)
+#define WHEEL_TREAD (0.17f)
 
 // 电机相关宏定义
 #define PWM_HTIM htim1 //产生两电机使用的四路PWM的定时器的句柄

@@ -98,6 +98,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_DMA_Init();
   MX_USART2_UART_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   htim7.PeriodElapsedCallback = HAL_SysTimerCallback;
   /* USER CODE END 2 */
