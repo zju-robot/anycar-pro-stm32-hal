@@ -70,8 +70,8 @@ void StartMotionControl()
 
 void StopMotionControl()
 {
-  htim6.PeriodElapsedCallback = NULL;
   HAL_TIM_Base_Stop_IT(&htim6);
+  htim6.PeriodElapsedCallback = NULL;
 
   BDC_Stop(&hbdcL);
   ENC_Stop(&hencL);

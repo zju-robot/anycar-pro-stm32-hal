@@ -2,6 +2,9 @@
 
 HAL_StatusTypeDef BDC_Start(BDC_HandleTypeDef *hbdc)
 {
+  __HAL_TIM_SET_COMPARE(hbdc->hsp.htimA, hbdc->hsp.channelA, 0);
+  __HAL_TIM_SET_COMPARE(hbdc->hsp.htimB, hbdc->hsp.channelB, 0);
+  
   HAL_StatusTypeDef status;
   if ((status = HAL_TIM_PWM_Start(hbdc->hsp.htimA, hbdc->hsp.channelA)) !=
       HAL_OK)
@@ -14,6 +17,9 @@ HAL_StatusTypeDef BDC_Start(BDC_HandleTypeDef *hbdc)
 
 HAL_StatusTypeDef BDC_Stop(BDC_HandleTypeDef *hbdc)
 {
+  __HAL_TIM_SET_COMPARE(hbdc->hsp.htimA, hbdc->hsp.channelA, 0);
+  __HAL_TIM_SET_COMPARE(hbdc->hsp.htimB, hbdc->hsp.channelB, 0);
+
   HAL_StatusTypeDef status;
   if ((status = HAL_TIM_PWM_Stop(hbdc->hsp.htimA, hbdc->hsp.channelA)) !=
       HAL_OK)

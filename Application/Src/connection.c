@@ -2,6 +2,7 @@
 
 #include "tasks.h"
 #include "communication.h"
+#include "motion_control.h"
 
 /**
  * @brief 定时循环发送心跳包的回调
@@ -14,4 +15,30 @@ void SendHeartbeatsCallback(void *argument)
   osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
 }
 
-void StartConnection() { osTimerStart(sendHeartbeatsTimerHandle, 1000); }
+/**
+ * @brief 检查串口是否连接上. 如果断连立刻停止电机
+ *
+ * @param argument FreeRTOS默认参数. 可无视
+ */
+void StartCheckConnectionTask(void *argument)
+{
+  static mavlink_heartbeat_t heartbeatMsg;
+  static uint32_t connected = 0;
+
+  for (;;)
+  {
+    osStatus_t status =
+        osMessageQueueGet(heartbeatsQueueHandle, &heartbeatMsg, 0, 700);
+
+    if (status == osOK && !connected)
+      StartMotionControl(), connected = 1;
+    else if (status != osOK && connected)
+      StopMotionControl(), connected = 0;
+  }
+}
+
+void StartConnection()
+{
+  osTimerStart(sendHeartbeatsTimerHandle, 200);
+  osThreadResume(checkConnectionTaskHandle);
+}

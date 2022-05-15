@@ -22,7 +22,6 @@ void StartDefaultTask(void *argument)
 
   StartCommunication();
   StartConnection();
-  StartMotionControl();
   StartStatusReport();
 
   for (;;)

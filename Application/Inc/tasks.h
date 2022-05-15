@@ -6,6 +6,7 @@ extern osThreadId_t defaultTaskHandle;
 extern osThreadId_t transmitMessagesTaskHandle;
 extern osThreadId_t parseMessagesTaskHandle;
 extern osThreadId_t executeCommandsTaskHandle;
+extern osThreadId_t checkConnectionTaskHandle;
 extern osMessageQueueId_t receivedBytesQueueHandle;
 extern osMessageQueueId_t transmitMessagesQueueHandle;
 extern osMessageQueueId_t heartbeatsQueueHandle;

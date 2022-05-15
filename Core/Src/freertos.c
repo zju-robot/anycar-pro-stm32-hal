@@ -75,6 +75,13 @@ const osThreadAttr_t executeCommandsTask_attributes = {
   .stack_size = 96 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for checkConnectionTask */
+osThreadId_t checkConnectionTaskHandle;
+const osThreadAttr_t checkConnectionTask_attributes = {
+  .name = "checkConnectionTask",
+  .stack_size = 96 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for receivedBytesQueue */
 osMessageQueueId_t receivedBytesQueueHandle;
 const osMessageQueueAttr_t receivedBytesQueue_attributes = {
@@ -115,6 +122,7 @@ void StartDefaultTask(void *argument);
 extern void StartTransmitMessagesTask(void *argument);
 void StartParseMessagesTask(void *argument);
 void StartExecuteCommandsTask(void *argument);
+extern void StartCheckConnectionTask(void *argument);
 extern void SendHeartbeatsCallback(void *argument);
 extern void ReportStatusCallback(void *argument);
 
@@ -178,6 +186,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of executeCommandsTask */
   executeCommandsTaskHandle = osThreadNew(StartExecuteCommandsTask, NULL, &executeCommandsTask_attributes);
+
+  /* creation of checkConnectionTask */
+  checkConnectionTaskHandle = osThreadNew(StartCheckConnectionTask, NULL, &checkConnectionTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
