@@ -10,6 +10,13 @@ typedef struct __Speed
   float yaw_rate;
 } SpeedTypeDef;
 
+typedef struct __Odom
+{
+  float x;
+  float y;
+  float yaw;
+} OdomTypeDef;
+
 /**
  * @brief 启动电机控制
  *
@@ -51,3 +58,10 @@ void SetMotorsTargetRate(float *rateL_ptr, float *rateR_ptr);
  * @param rateR_ptr 将写入右侧电机当前转速的指针
  */
 void GetCurrentMotorsRate(float *rateL_ptr, float *rateR_ptr);
+
+/**
+ * @brief 获得当前按照运动学推算得到的里程
+ *
+ * @param odom_ptr 将写入里程的结构体的指针
+ */
+void GetCurrentOdometry(OdomTypeDef *odom_ptr);

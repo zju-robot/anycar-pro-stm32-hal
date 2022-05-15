@@ -99,6 +99,11 @@ void StartTransmitMessagesTask(void *argument)
                                                        &genericMsg.command);
       break;
 
+    case MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE:
+      mavlink_msg_control_system_state_encode(0, 0, &mavMsg,
+                                              &genericMsg.status);
+      break;
+
     default:
       continue;
       ;

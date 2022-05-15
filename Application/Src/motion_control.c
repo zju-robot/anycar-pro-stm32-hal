@@ -29,6 +29,9 @@ PID_HandleTypeDef hpidR = {
 float motorLTargetRate = 0.0f;
 float motorRTargetRate = 0.0f;
 
+SpeedTypeDef speed;
+OdomTypeDef odom = {.x = 0.0f, .y = 0.0f, .yaw = 0.0f};
+
 void MotorControlCallback(TIM_HandleTypeDef *htim)
 {
   UNUSED(htim);
@@ -41,6 +44,14 @@ void MotorControlCallback(TIM_HandleTypeDef *htim)
 
   BDC_Drive(&hbdcL, hpidL.output);
   BDC_Drive(&hbdcR, hpidR.output);
+
+  speed.x_speed = (hencR.rate * WHEEL_RADIUS + hencL.rate * WHEEL_RADIUS) / 2;
+  speed.yaw_rate =
+      (hencR.rate * WHEEL_RADIUS - hencL.rate * WHEEL_RADIUS) / WHEEL_TREAD;
+
+  odom.x += speed.x_speed * cosf(odom.yaw) * 0.01f;
+  odom.y += speed.x_speed * sinf(odom.yaw) * 0.01f;
+  odom.yaw += speed.yaw_rate * 0.01f;
 }
 
 void StartMotionControl()
@@ -80,13 +91,7 @@ void SetTargetSpeed(const SpeedTypeDef *speed_ptr)
       WHEEL_RADIUS;
 }
 
-void GetCurrentSpeed(SpeedTypeDef *speed_ptr)
-{
-  speed_ptr->x_speed =
-      (hencR.rate * WHEEL_RADIUS + hencL.rate * WHEEL_RADIUS) / 2;
-  speed_ptr->yaw_rate =
-      (hencR.rate * WHEEL_RADIUS - hencL.rate * WHEEL_RADIUS) / WHEEL_TREAD;
-}
+void GetCurrentSpeed(SpeedTypeDef *speed_ptr) { *speed_ptr = speed; }
 
 void SetMotorsTargetRate(float *rateL_ptr, float *rateR_ptr)
 {
@@ -99,3 +104,5 @@ void GetCurrentMotorsRate(float *rateL_ptr, float *rateR_ptr)
   *rateL_ptr = hencL.rate;
   *rateR_ptr = hencR.rate;
 }
+
+void GetCurrentOdometry(OdomTypeDef *odom_ptr) { *odom_ptr = odom; }

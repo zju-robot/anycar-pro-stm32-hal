@@ -58,7 +58,7 @@ const osThreadAttr_t defaultTask_attributes = {
 osThreadId_t transmitMessagesTaskHandle;
 const osThreadAttr_t transmitMessagesTask_attributes = {
   .name = "transmitMessagesTask",
-  .stack_size = 96 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for parseMessagesTask */
@@ -100,6 +100,11 @@ osTimerId_t sendHeartbeatsTimerHandle;
 const osTimerAttr_t sendHeartbeatsTimer_attributes = {
   .name = "sendHeartbeatsTimer"
 };
+/* Definitions for reportStatusTimer */
+osTimerId_t reportStatusTimerHandle;
+const osTimerAttr_t reportStatusTimer_attributes = {
+  .name = "reportStatusTimer"
+};
 /* Definitions for usbOccupationBinarySem */
 osSemaphoreId_t usbOccupationBinarySemHandle;
 const osSemaphoreAttr_t usbOccupationBinarySem_attributes = {
@@ -116,6 +121,7 @@ void StartTransmitMessagesTask(void *argument);
 void StartParseMessagesTask(void *argument);
 void StartExecuteCommandsTask(void *argument);
 void SendHeartbeatsCallback(void *argument);
+void ReportStatusCallback(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -145,6 +151,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of sendHeartbeatsTimer */
   sendHeartbeatsTimerHandle = osTimerNew(SendHeartbeatsCallback, osTimerPeriodic, NULL, &sendHeartbeatsTimer_attributes);
 
+  /* creation of reportStatusTimer */
+  reportStatusTimerHandle = osTimerNew(ReportStatusCallback, osTimerPeriodic, NULL, &reportStatusTimer_attributes);
+
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
@@ -154,7 +163,7 @@ void MX_FREERTOS_Init(void) {
   receivedBytesQueueHandle = osMessageQueueNew (32, 1, &receivedBytesQueue_attributes);
 
   /* creation of transmitMessagesQueue */
-  transmitMessagesQueueHandle = osMessageQueueNew (4, 60, &transmitMessagesQueue_attributes);
+  transmitMessagesQueueHandle = osMessageQueueNew (4, 112, &transmitMessagesQueue_attributes);
 
   /* creation of heartbeatsQueue */
   heartbeatsQueueHandle = osMessageQueueNew (4, 12, &heartbeatsQueue_attributes);
@@ -267,6 +276,14 @@ __weak void SendHeartbeatsCallback(void *argument)
   /* USER CODE BEGIN SendHeartbeatsCallback */
 
   /* USER CODE END SendHeartbeatsCallback */
+}
+
+/* ReportStatusCallback function */
+__weak void ReportStatusCallback(void *argument)
+{
+  /* USER CODE BEGIN ReportStatusCallback */
+
+  /* USER CODE END ReportStatusCallback */
 }
 
 /* Private application code --------------------------------------------------*/

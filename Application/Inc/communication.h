@@ -16,17 +16,18 @@ typedef struct __GenericMsg
   {
     mavlink_heartbeat_t heartbeat;                   //心跳包
     mavlink_set_position_target_local_ned_t command; //控制命令
+    mavlink_control_system_state_t status;           //运动学状态反馈
   };
 } GenericMsg;
 
 /**
  * @brief 启动通信功能
- * 
+ *
  */
 void StartCommunication();
 
 /**
  * @brief 停止通信功能
- * 
+ *
  */
 void StopCommunication();

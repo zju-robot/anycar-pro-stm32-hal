@@ -11,4 +11,5 @@ extern osMessageQueueId_t transmitMessagesQueueHandle;
 extern osMessageQueueId_t heartbeatsQueueHandle;
 extern osMessageQueueId_t commandsQueueHandle;
 extern osTimerId_t sendHeartbeatsTimerHandle;
+extern osTimerId_t reportStatusTimerHandle;
 extern osSemaphoreId_t usbOccupationBinarySemHandle;
