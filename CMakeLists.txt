@@ -72,6 +72,10 @@ add_link_options(-T ${LD_SCRIPT})
 # 包含头文件
 include_directories(${INCLUDE_DIRECTORIES})
 
+# 使用newlib-nano系统库
+add_compile_options(--specs=nano.specs --specs=nosys.specs)
+add_link_options(--specs=nano.specs --specs=nosys.specs)
+
 
 # # # # # # # # # #
 # 编译目标设置
