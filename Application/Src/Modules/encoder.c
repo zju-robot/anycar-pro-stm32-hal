@@ -2,6 +2,7 @@
 
 HAL_StatusTypeDef ENC_Start(ENC_HandleTypeDef *henc)
 {
+  __HAL_TIM_SET_COUNTER(henc->hsp.htim, 0);
   return HAL_TIM_Encoder_Start(henc->hsp.htim, TIM_CHANNEL_ALL);
 }
 

@@ -56,6 +56,9 @@ void MotorControlCallback(TIM_HandleTypeDef *htim)
 
 void StartMotionControl()
 {
+  motorLTargetRate = 0;
+  motorRTargetRate = 0;
+
   BDC_Start(&hbdcL);
   ENC_Start(&hencL);
   PID_Init(&hpidL);
