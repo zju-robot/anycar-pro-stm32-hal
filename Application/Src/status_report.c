@@ -26,7 +26,7 @@ void ReportStatusCallback(void *argument)
   genericTxMsg.motionState.y = odom.y;
   genericTxMsg.motionState.yaw = odom.yaw;
 
-  osMessageQueuePut(transmitMessagesQueueHandle, &genericTxMsg, 0, 0);
+  osMessageQueuePut(transmitMessagesQueueHandle, &genericTxMsg, 0, 10);
 }
 
 void StartStatusReport()

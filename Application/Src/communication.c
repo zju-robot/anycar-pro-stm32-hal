@@ -42,25 +42,25 @@ void StartParseMessagesTask(void *argument)
       {
       case MAVLINK_MSG_ID_HEARTBEAT:
         mavlink_msg_heartbeat_decode(&mavMsg, &heartbeatMsg);
-        osMessageQueuePut(heartbeatsQueueHandle, &heartbeatMsg, 0, 0);
+        osMessageQueuePut(heartbeatsQueueHandle, &heartbeatMsg, 0, 10);
         break;
 
       case MAVLINK_MSG_ID_SET_SPEED:
         cmdMsg.msgid = MAVLINK_MSG_ID_SET_SPEED;
         mavlink_msg_set_speed_decode(&mavMsg, &cmdMsg.setSpeed);
-        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 0);
+        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 10);
         break;
 
       case MAVLINK_MSG_ID_SET_MOTORS_RATE:
         cmdMsg.msgid = MAVLINK_MSG_ID_SET_MOTORS_RATE;
         mavlink_msg_set_motors_rate_decode(&mavMsg, &cmdMsg.setMotorsRate);
-        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 0);
+        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 10);
         break;
 
       case MAVLINK_MSG_ID_SET_ODOMETRY:
         cmdMsg.msgid = MAVLINK_MSG_ID_SET_ODOMETRY;
         mavlink_msg_set_odometry_decode(&mavMsg, &cmdMsg.setOdometry);
-        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 0);
+        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 10);
         break;
 
       default:

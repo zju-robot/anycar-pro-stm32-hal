@@ -11,8 +11,9 @@
  */
 void SendHeartbeatsCallback(void *argument)
 {
-  static GenericTxMsg genericTxMsg = {.msgid = MAVLINK_MSG_ID_HEARTBEAT};
-  osMessageQueuePut(transmitMessagesQueueHandle, &genericTxMsg, 0, 0);
+  static GenericTxMsg genericTxMsg = {.msgid = MAVLINK_MSG_ID_HEARTBEAT,
+                                      .heartbeat = {.time = 0}};
+  osMessageQueuePut(transmitMessagesQueueHandle, &genericTxMsg, 0, 10);
 }
 
 /**
