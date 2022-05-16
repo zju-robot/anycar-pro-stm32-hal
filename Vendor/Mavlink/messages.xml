@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<mavlink>
+  <version>3</version>
+  <messages>
+    <message id="0" name="HEARTBEAT">
+      <field type="uint64_t" name="time" units="us" />
+    </message>
+    <message id="10" name="SET_SPEED">
+      <field type="float" name="xVel" units="m/s" />
+      <field type="float" name="yawRate" units="rad/s" />
+    </message>
+    <message id="11" name="SET_MOTORS_RATE">
+      <field type="float" name="rateL" units="rad/s" />
+      <field type="float" name="rateR" units="rad/s" />
+    </message>
+    <message id="12" name="SET_ODOMETRY">
+      <field type="float" name="x" units="m" />
+      <field type="float" name="y" units="m" />
+      <field type="float" name="yaw" units="rad" />
+    </message>
+    <message id="20" name="MOTION_STATE">
+      <field type="float" name="x" units="m" />
+      <field type="float" name="y" units="m" />
+      <field type="float" name="yaw" units="rad" />
+      <field type="float" name="xVel" units="m/s" />
+      <field type="float" name="yawRate" units="rad/s" />
+    </message>
+  </messages>
+</mavlink>

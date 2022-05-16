@@ -15,21 +15,18 @@ void ReportStatusCallback(void *argument)
 
   static SpeedTypeDef speed;
   static OdomTypeDef odom;
-  static GenericMsg genericMsg = {.msgid = MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE};
+  static GenericTxMsg genericTxMsg = {.msgid = MAVLINK_MSG_ID_MOTION_STATE};
 
   GetCurrentSpeed(&speed);
-  genericMsg.status.x_vel = speed.x_speed;
-  genericMsg.status.yaw_rate = speed.yaw_rate;
+  genericTxMsg.motionState.xVel = speed.x_speed;
+  genericTxMsg.motionState.yawRate = speed.yaw_rate;
 
   GetCurrentOdometry(&odom);
-  genericMsg.status.x_pos = odom.x;
-  genericMsg.status.y_pos = odom.y;
-  genericMsg.status.q[0] = sinf(odom.yaw);
-  genericMsg.status.q[1] = 0;
-  genericMsg.status.q[2] = 0;
-  genericMsg.status.q[3] = cosf(odom.yaw);
+  genericTxMsg.motionState.x = odom.x;
+  genericTxMsg.motionState.y = odom.y;
+  genericTxMsg.motionState.yaw = odom.yaw;
 
-  osMessageQueuePut(transmitMessagesQueueHandle, &genericMsg, 0, 0);
+  osMessageQueuePut(transmitMessagesQueueHandle, &genericTxMsg, 0, 0);
 }
 
 void StartStatusReport()

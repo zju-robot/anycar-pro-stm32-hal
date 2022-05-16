@@ -28,7 +28,8 @@ void StartParseMessagesTask(void *argument)
   static uint8_t byte;
   static mavlink_message_t mavMsg;
   static mavlink_status_t mavStatus;
-  static GenericMsg genericMsg;
+  static mavlink_heartbeat_t heartbeatMsg;
+  static GenericCmd cmdMsg;
 
   for (;;)
   {
@@ -42,14 +43,26 @@ void StartParseMessagesTask(void *argument)
       switch (mavMsg.msgid)
       {
       case MAVLINK_MSG_ID_HEARTBEAT:
-        mavlink_msg_heartbeat_decode(&mavMsg, &genericMsg.heartbeat);
-        osMessageQueuePut(heartbeatsQueueHandle, &genericMsg.heartbeat, 0, 0);
+        mavlink_msg_heartbeat_decode(&mavMsg, &heartbeatMsg);
+        osMessageQueuePut(heartbeatsQueueHandle, &heartbeatMsg, 0, 0);
         break;
 
-      case MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED:
-        mavlink_msg_set_position_target_local_ned_decode(&mavMsg,
-                                                         &genericMsg.command);
-        osMessageQueuePut(commandsQueueHandle, &genericMsg.command, 0, 0);
+      case MAVLINK_MSG_ID_SET_SPEED:
+        cmdMsg.msgid = MAVLINK_MSG_ID_SET_SPEED;
+        mavlink_msg_set_speed_decode(&mavMsg, &cmdMsg.setSpeed);
+        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 0);
+        break;
+
+      case MAVLINK_MSG_ID_SET_MOTORS_RATE:
+        cmdMsg.msgid = MAVLINK_MSG_ID_SET_MOTORS_RATE;
+        mavlink_msg_set_motors_rate_decode(&mavMsg, &cmdMsg.setMotorsRate);
+        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 0);
+        break;
+
+      case MAVLINK_MSG_ID_SET_ODOMETRY:
+        cmdMsg.msgid = MAVLINK_MSG_ID_SET_ODOMETRY;
+        mavlink_msg_set_odometry_decode(&mavMsg, &cmdMsg.setOdometry);
+        osMessageQueuePut(commandsQueueHandle, &cmdMsg, 0, 0);
         break;
 
       default:
@@ -70,29 +83,23 @@ void StartTransmitMessagesTask(void *argument)
 
   static uint8_t buffer[TX_BUF_SIZE];
   static mavlink_message_t mavMsg;
-  static GenericMsg genericMsg;
+  static GenericTxMsg genericTxMsg;
 
   for (;;)
   {
     // 等待新的待发送消息
-    osMessageQueueGet(transmitMessagesQueueHandle, &genericMsg, NULL,
+    osMessageQueueGet(transmitMessagesQueueHandle, &genericTxMsg, NULL,
                       osWaitForever);
 
     // 根据消息类型进行相应的编码
-    switch (genericMsg.msgid)
+    switch (genericTxMsg.msgid)
     {
     case MAVLINK_MSG_ID_HEARTBEAT:
-      mavlink_msg_heartbeat_encode(0, 0, &mavMsg, &genericMsg.heartbeat);
+      mavlink_msg_heartbeat_encode(0, 0, &mavMsg, &genericTxMsg.heartbeat);
       break;
 
-    case MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED:
-      mavlink_msg_set_position_target_local_ned_encode(0, 0, &mavMsg,
-                                                       &genericMsg.command);
-      break;
-
-    case MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE:
-      mavlink_msg_control_system_state_encode(0, 0, &mavMsg,
-                                              &genericMsg.status);
+    case MAVLINK_MSG_ID_MOTION_STATE:
+      mavlink_msg_motion_state_encode(0, 0, &mavMsg, &genericTxMsg.motionState);
       break;
 
     default:

@@ -2,7 +2,7 @@
 FREERTOS.FootprintOK=true
 FREERTOS.HEAP_NUMBER=5
 FREERTOS.IPParameters=Tasks01,configMAX_TASK_NAME_LEN,FootprintOK,Queues01,configTOTAL_HEAP_SIZE,configMINIMAL_STACK_SIZE,HEAP_NUMBER,Timers01,configUSE_NEWLIB_REENTRANT
-FREERTOS.Queues01=receivedBytesQueue,32,1,1,Dynamic,NULL,NULL;transmitMessagesQueue,4,112,1,Dynamic,NULL,NULL;heartbeatsQueue,2,12,1,Dynamic,NULL,NULL;commandsQueue,2,56,1,Dynamic,NULL,NULL
+FREERTOS.Queues01=receivedBytesQueue,32,1,1,Dynamic,NULL,NULL;transmitMessagesQueue,8,32,1,Dynamic,NULL,NULL;heartbeatsQueue,4,8,1,Dynamic,NULL,NULL;commandsQueue,4,16,1,Dynamic,NULL,NULL
 FREERTOS.Tasks01=defaultTask,8,128,StartDefaultTask,As weak,NULL,Dynamic,NULL,NULL;transmitMessagesTask,8,160,StartTransmitMessagesTask,As external,NULL,Dynamic,NULL,NULL;parseMessagesTask,8,96,StartParseMessagesTask,As external,NULL,Dynamic,NULL,NULL;executeCommandsTask,8,96,StartExecuteCommandsTask,As external,NULL,Dynamic,NULL,NULL;checkConnectionTask,8,96,StartCheckConnectionTask,As external,NULL,Dynamic,NULL,NULL
 FREERTOS.Timers01=sendHeartbeatsTimer,SendHeartbeatsCallback,osTimerPeriodic,As external,NULL,Dynamic,NULL;reportStatusTimer,ReportStatusCallback,osTimerPeriodic,As external,NULL,Dynamic,NULL
 FREERTOS.configMAX_TASK_NAME_LEN=32

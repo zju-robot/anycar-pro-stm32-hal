@@ -52,15 +52,20 @@ void StartExecuteCommandsTask(void *argument)
 {
   UNUSED(argument);
 
-  static mavlink_set_position_target_local_ned_t cmdMsg;
+  static GenericCmd cmdMsg;
   static SpeedTypeDef targetSpeed;
 
   for (;;)
   {
     osMessageQueueGet(commandsQueueHandle, &cmdMsg, 0, osWaitForever);
 
-    targetSpeed.x_speed = cmdMsg.vx;
-    targetSpeed.yaw_rate = cmdMsg.yaw_rate;
-    SetTargetSpeed(&targetSpeed);
+    switch (cmdMsg.msgid)
+    {
+    case MAVLINK_MSG_ID_SET_SPEED:
+      targetSpeed.x_speed = cmdMsg.setSpeed.xVel;
+      targetSpeed.yaw_rate = cmdMsg.setSpeed.yawRate;
+      SetTargetSpeed(&targetSpeed);
+      break;
+    }
   }
 }

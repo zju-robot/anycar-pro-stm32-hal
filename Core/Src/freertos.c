@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "common/mavlink.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -162,13 +162,13 @@ void MX_FREERTOS_Init(void) {
   receivedBytesQueueHandle = osMessageQueueNew (32, 1, &receivedBytesQueue_attributes);
 
   /* creation of transmitMessagesQueue */
-  transmitMessagesQueueHandle = osMessageQueueNew (4, 112, &transmitMessagesQueue_attributes);
+  transmitMessagesQueueHandle = osMessageQueueNew (8, 32, &transmitMessagesQueue_attributes);
 
   /* creation of heartbeatsQueue */
-  heartbeatsQueueHandle = osMessageQueueNew (2, 12, &heartbeatsQueue_attributes);
+  heartbeatsQueueHandle = osMessageQueueNew (4, 8, &heartbeatsQueue_attributes);
 
   /* creation of commandsQueue */
-  commandsQueueHandle = osMessageQueueNew (2, 56, &commandsQueue_attributes);
+  commandsQueueHandle = osMessageQueueNew (4, 16, &commandsQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
