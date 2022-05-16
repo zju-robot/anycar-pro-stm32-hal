@@ -1,8 +1,11 @@
 #pragma once
 
-#define TX_BUF_SIZE 80
-
 #include "messages/mavlink.h"
+
+#include "anycar_pro.h"
+
+#define TX_BUF_SIZE 80
+#define COMM_HUART EXT_HUART
 
 /**
  * @brief 通用消息类型, 同时存储所有类型消息, 用于统一队列数据类型

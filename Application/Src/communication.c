@@ -9,7 +9,7 @@ void Uart_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   UNUSED(huart);
 
-  HAL_UART_Receive_IT(&EXT_HUART, &receivedByte, 1); //开启下一次接收
+  HAL_UART_Receive_IT(&COMM_HUART, &receivedByte, 1); //开启下一次接收
   osMessageQueuePut(receivedBytesQueueHandle, &receivedByte, 0,
                     0); //压入本次收到的字节
 }
@@ -107,7 +107,7 @@ void StartTransmitMessagesTask(void *argument)
 
     // 发送消息
     uint16_t length = mavlink_msg_to_send_buffer(buffer, &mavMsg);
-    while (HAL_UART_Transmit(&EXT_HUART, buffer, length, 100) != HAL_OK)
+    while (HAL_UART_Transmit(&COMM_HUART, buffer, length, 100) != HAL_OK)
       osDelay(1);
   }
 }
@@ -115,8 +115,8 @@ void StartTransmitMessagesTask(void *argument)
 void StartCommunication()
 {
   // USB串口初始化
-  EXT_HUART.RxCpltCallback = Uart_RxCpltCallback;
-  HAL_UART_Receive_IT(&EXT_HUART, &receivedByte, 1);
+  COMM_HUART.RxCpltCallback = Uart_RxCpltCallback;
+  HAL_UART_Receive_IT(&COMM_HUART, &receivedByte, 1);
 
   osMessageQueueReset(receivedBytesQueueHandle);
   osThreadResume(parseMessagesTaskHandle);
@@ -127,5 +127,5 @@ void StopCommunication()
 {
   osThreadSuspend(parseMessagesTaskHandle);
   osThreadSuspend(transmitMessagesTaskHandle);
-  EXT_HUART.RxCpltCallback = NULL;
+  COMM_HUART.RxCpltCallback = NULL;
 }
