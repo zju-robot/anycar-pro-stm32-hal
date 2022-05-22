@@ -54,6 +54,7 @@ void StartExecuteCommandsTask(void *argument)
 
   static GenericCmd cmdMsg;
   static SpeedTypeDef targetSpeed;
+  static OdomTypeDef odometry;
 
   for (;;)
   {
@@ -65,6 +66,18 @@ void StartExecuteCommandsTask(void *argument)
       targetSpeed.x_speed = cmdMsg.setSpeed.xVel;
       targetSpeed.yaw_rate = cmdMsg.setSpeed.yawRate;
       SetTargetSpeed(&targetSpeed);
+      break;
+
+    case MAVLINK_MSG_ID_SET_MOTORS_RATE:
+      SetMotorsTargetRate(&cmdMsg.setMotorsRate.rateL,
+                          &cmdMsg.setMotorsRate.rateR);
+      break;
+
+    case MAVLINK_MSG_ID_SET_ODOMETRY:
+      odometry.x = cmdMsg.setOdometry.x;
+      odometry.y = cmdMsg.setOdometry.y;
+      odometry.yaw = cmdMsg.setOdometry.yaw;
+      SetOdometry(&odometry);
       break;
     }
   }

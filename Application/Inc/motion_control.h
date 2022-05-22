@@ -60,6 +60,13 @@ void SetMotorsTargetRate(float *rateL_ptr, float *rateR_ptr);
 void GetCurrentMotorsRate(float *rateL_ptr, float *rateR_ptr);
 
 /**
+ * @brief 重置当前的累计里程值
+ *
+ * @param odom_ptr 包含里程信息的结构体的指针
+ */
+void SetOdometry(OdomTypeDef *odom_ptr);
+
+/**
  * @brief 获得当前按照运动学推算得到的里程
  *
  * @param odom_ptr 将写入里程的结构体的指针

@@ -108,4 +108,6 @@ void GetCurrentMotorsRate(float *rateL_ptr, float *rateR_ptr)
   *rateR_ptr = hencR.rate;
 }
 
+void SetOdometry(OdomTypeDef *odom_ptr) { odom = *odom_ptr; }
+
 void GetCurrentOdometry(OdomTypeDef *odom_ptr) { *odom_ptr = odom; }
